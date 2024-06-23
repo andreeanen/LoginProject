@@ -1,8 +1,25 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model LoginProject.Models.UserViewModel
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="vh-100  bg-color-container">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-10 col-lg-10 col-xl-10">
+                <div class="card bg-dark text-white round-border">
+                    <div class="card-body p-5 text-center">
+                        <div class="mb-md-5 mt-md-4 pb-5">
+                            @if (!string.IsNullOrEmpty(Model.UserName))
+                            {
+                                <h2 class="fw-bold mb-2 h2">Hi @Model.UserName!</h2>
+                                <div class="text-white-50 mb-5 h4">You are logged in!</div>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.ImageBase64))
+                            {
+                                <img src="data:image/png;base64,@Model.ImageBase64" alt="Profile Image" />
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

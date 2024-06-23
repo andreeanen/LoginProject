@@ -16,3 +16,15 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.bg-color-container {
+    background-color: #faf5fd;
+}
+
+.bg-color-input {
+    background-color: #dad0e0;
+}
+
+.round-border{
+    border-radius: 1rem;
+}
