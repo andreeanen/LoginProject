@@ -1,4 +1,5 @@
 using LoginProject.Services;
+using LoginProject.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,8 +11,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 
 // Add services to the container.
+builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddControllersWithViews();
-builder.Services.AddHttpClient<AccountService>();
 
 var app = builder.Build();
 
