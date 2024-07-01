@@ -1,17 +1,17 @@
 ﻿using LoginProject.Models;
-using LoginProject.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using LoginProject.Services.Interfaces;
 
 namespace LoginProject.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly AccountService _accountService;
+        private readonly IAccountService _accountService;
 
-        public AccountController(AccountService accountService)
+        public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
         }
@@ -38,13 +38,7 @@ namespace LoginProject.Controllers
                     }
 
                     await SetSignInUser(model, token);
-                    var base64Image = await _accountService.GetImageString(token) ?? string.Empty;
-
-                    var user = new UserViewModel
-                    {
-                        UserName = model.Username,
-                        ImageBase64 = base64Image,
-                    };
+                    var user = await _accountService.GetUser(model.UserName, token);
 
                     return RedirectToAction("Index", "Home", user);
                 }
@@ -59,18 +53,18 @@ namespace LoginProject.Controllers
             return View(model);
         }
 
-        private async Task SetSignInUser(LoginViewModel model, string? token)
+        private async Task SetSignInUser(LoginViewModel model, string token)
         {
             var claims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.Name, model.Username),
+                        new Claim(ClaimTypes.Name, model.UserName),
                         new Claim("access_token", token)
                     };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var authProperties = new AuthenticationProperties
             {
-                IsPersistent = false
+                IsPersistent = true
             };
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
